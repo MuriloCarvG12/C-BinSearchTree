@@ -1,0 +1,6 @@
+# ninja log v5
+2	149	7740634481930670	CMakeFiles/trees.dir/main.c.obj	1eedcd9df15bb914
+123	251	7740665304536033	trees.exe	d403c88cf5b33cb7
+2	122	7740665303269141	CMakeFiles/trees.dir/bintree.c.obj	1ba13c7babaa3bc4
+2	105	7740666752838053	CMakeFiles/trees.dir/bintree.c.obj	1ba13c7babaa3bc4
+105	234	7740666754104660	trees.exe	d403c88cf5b33cb7

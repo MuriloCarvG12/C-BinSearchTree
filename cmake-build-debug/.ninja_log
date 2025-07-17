@@ -86,3 +86,14 @@
 427	751	7744910679111269	trees.exe	d403c88cf5b33cb7
 3	274	7744911152525129	CMakeFiles/trees.dir/main.c.obj	1eedcd9df15bb914
 275	442	7744911154160749	trees.exe	d403c88cf5b33cb7
+9	290	7744928870694124	CMakeFiles/trees.dir/bintree.c.obj	1ba13c7babaa3bc4
+3	300	7744928871043197	CMakeFiles/trees.dir/main.c.obj	1eedcd9df15bb914
+300	534	7744928873366978	trees.exe	d403c88cf5b33cb7
+3	304	7744928966950380	CMakeFiles/trees.dir/main.c.obj	1eedcd9df15bb914
+305	583	7744928969084665	trees.exe	d403c88cf5b33cb7
+3	139	7744929279017745	CMakeFiles/trees.dir/bintree.c.obj	1ba13c7babaa3bc4
+139	281	7744929280376374	trees.exe	d403c88cf5b33cb7
+2	162	7744930690668842	CMakeFiles/trees.dir/bintree.c.obj	1ba13c7babaa3bc4
+163	358	7744930692693422	trees.exe	d403c88cf5b33cb7
+3	144	7744933890334704	CMakeFiles/trees.dir/bintree.c.obj	1ba13c7babaa3bc4
+145	403	7744933892748260	trees.exe	d403c88cf5b33cb7

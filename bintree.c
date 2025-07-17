@@ -10,6 +10,9 @@ tree_node *Tree_root = NULL;
 void user_menu(tree_node **tree)
 {
     int current_option = 0;
+    int node_value = 0;
+    int tree_depth = 0;
+    int tree_nodes = 0;
     while(current_option != 20)
     {
         switch(current_option)
@@ -29,6 +32,51 @@ void user_menu(tree_node **tree)
                 printf("-- 20 - Close the program --\n");
                 scanf("%d", &current_option);
                 break;
+            case 1:
+                printf("Please Inform the value of the new node\n");
+                scanf("%d", &node_value);
+                add_node(&(*tree), node_value, 0);
+                current_option = 0;
+                break;
+            case 2:
+                printf("Please Inform the value of the node to be deleted\n");
+                scanf("%d", &node_value);
+                remove_node(&(*tree), node_value);
+                current_option = 0;
+                break;
+            case 3:
+                print_tree((*tree), 0);
+                current_option = 0;
+                break;
+            case 4:
+                printf("Please Inform the value of the node to be searched for\n");
+                scanf("%d", &node_value);
+                find_node(&(*tree), node_value, 0);
+                current_option = 0;
+                break;
+            case 5:
+                find_smallest_node(&(*tree), 0);
+                current_option = 0;
+                break;
+            case 6:
+                find_biggest_node(&(*tree), 0);
+                current_option = 0;
+                break;
+            case 7:
+                tree_depth = find_tree_depth((*tree));
+                printf("The depth of the tree is %d\n", tree_depth);
+                current_option = 0;
+                break;
+            case 8:
+                tree_nodes = count_nodes((*tree));
+                printf("The amount of nodes in the tree is %d\n", tree_nodes);
+                current_option = 0;
+                break;
+            case 9:
+                free_tree(&(*tree));
+                current_option = 0;
+                break;
+
         }
     }
 

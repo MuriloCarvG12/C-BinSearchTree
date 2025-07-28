@@ -94,43 +94,6 @@ void user_menu(tree_node **tree)
 
 }
 
-void add_node(tree_node **tree, int value, int depth)
-{
-    int current_depth = depth;
-    tree_node **current_node = tree;
-    if(*current_node == NULL)
-    {
-        printf("This node is empty! initializing it\n");
-        tree_node *new_node =  malloc(sizeof(tree_node));
-        new_node->node_value = value;
-        new_node->right_node = NULL;
-        new_node->left_node = NULL;
-        new_node->node_height = depth;
-        *current_node = new_node;
-        printf("  New leaf node with value %d added at depth %d\n", value, current_depth);
-    }
-    else
-    {
-        printf("This node is not empty! finding where to add our node\n");
-        if(value == (*current_node)->node_value)
-        {
-            printf("this value is already in our tree!\n");
-            return;
-        }
-        else if(value < (*current_node)->node_value)
-        {
-            printf("Our node value %d is smaller than %d\n", value ,(*current_node)->node_value);
-            current_node = &(*current_node)->left_node;
-            add_node(current_node,  value, current_depth + 1);
-        }
-        else
-        {
-            printf("Our node value %d is bigger than %d\n", value ,(*current_node)->node_value);
-            current_node = &(*current_node)->right_node;
-            add_node(current_node,  value, current_depth + 1);
-        }
-    }
-}
 
 void print_tree(tree_node *tree, int depth)
 {
@@ -334,31 +297,16 @@ int find_branch_height(tree_node *node_to_search)
     right = find_branch_height( (node_to_search)->right_node);
 
     return 1 + (left > right ? left : right);
-};
+}
 
-int find_node_balance(int node_value)
+int find_node_balance(tree_node *node_to_search)
 {
     int left, right, balance = 0;
-    tree_node *node_to_search;
-    node_to_search = find_node(&(Tree_root), 80);
     left = find_branch_height(node_to_search->left_node);
     right = find_branch_height(node_to_search->right_node);
     balance = right - left;
-    if(balance == 0)
-    {
-        printf("This Node is balanced!\n");
-    }
-    else if(balance < 0)
-    {
-        printf("This Node is unbalanced on the left branch!\n");
-    }
-    else
-    {
-        printf("This right is unbalanced on the right branch!\n");
-    }
+
     return balance;
-
-
 }
 
 void free_tree(tree_node **tree)
@@ -394,9 +342,70 @@ tree_node *left_node_rotate(tree_node *node)
     tree_node *aux_node = right_node->left_node;
 
     right_node->left_node = current_node;
-    right_node->right_node = aux_node;
+    current_node->right_node = aux_node;
 
 
     return right_node;
 
+}
+
+tree_node *add_node(tree_node **tree, int value, int depth)
+{
+    int current_depth = depth;
+    int current_balance;
+    tree_node **current_node = tree;
+
+    if(*current_node == NULL)
+    {
+        printf("This node is empty! initializing it\n");
+        tree_node *new_node =  malloc(sizeof(tree_node));
+        new_node->node_value = value;
+        new_node->right_node = NULL;
+        new_node->left_node = NULL;
+        new_node->node_height = depth;
+        *current_node = new_node;
+        printf("New leaf node with value %d added at depth %d\n", value, current_depth);
+    }
+    else
+    {
+        printf("This node is not empty! finding where to add our node\n");
+        if(value == (*current_node)->node_value)
+        {
+            printf("this value is already in our tree!\n");
+            return NULL;
+        }
+        else if(value < (*current_node)->node_value)
+        {
+            printf("Our node value %d is smaller than %d\n", value ,(*current_node)->node_value);
+
+            add_node(&(*current_node)->left_node,  value, current_depth + 1);
+        }
+        else
+        {
+            printf("Our node value %d is bigger than %d\n", value ,(*current_node)->node_value);
+            add_node(&(*current_node)->right_node,  value, current_depth + 1);
+        }
+        current_balance = find_node_balance((*current_node));
+        if(current_balance == 0)
+        {
+            printf("node %d is balanced!\n", (*current_node)->node_value);
+
+        }
+        else if(current_balance > 1)
+        {
+            printf("node %d is unbalanced on the right branch!\n", (*current_node)->node_value);
+            if ((*current_node)->right_node) {
+                *current_node = left_node_rotate(*current_node);
+            }
+        }
+        else if(current_balance < -1)
+        {
+            printf("node %d is unbalanced on the left branch!\n", (*current_node)->node_value);
+            if ((*current_node)->left_node)
+            {
+                *current_node = right_node_rotate(*current_node);
+            }
+
+        }
+    }
 }

@@ -14,6 +14,8 @@ void user_menu(tree_node **tree)
     int node_value = 0;
     int tree_depth = 0;
     int tree_nodes = 0;
+    int node_balance = 0;
+    tree_node *node_to_search;
     while(current_option != 20)
     {
         switch(current_option)
@@ -30,6 +32,7 @@ void user_menu(tree_node **tree)
                 printf("-- 7 - Find Tree Depth --\n");
                 printf("-- 8 - Count all the tree Nodes --\n");
                 printf("-- 9 - Free the tree --\n");
+                printf("-- 10 - find the tree height --\n");
                 printf("-- 20 - Close the program --\n");
                 scanf("%d", &current_option);
                 break;
@@ -52,7 +55,7 @@ void user_menu(tree_node **tree)
             case 4:
                 printf("Please Inform the value of the node to be searched for\n");
                 scanf("%d", &node_value);
-                find_node(&(*tree), node_value, 0);
+                find_node(&(*tree), node_value);
                 current_option = 0;
                 break;
             case 5:
@@ -77,7 +80,15 @@ void user_menu(tree_node **tree)
                 free_tree(&(*tree));
                 current_option = 0;
                 break;
-
+            case 10:
+                printf("Please Inform the value of the node to be searched for\n");
+                scanf("%d", &node_value);
+                node_to_search = find_node(&(*tree), node_value);
+                node_balance = find_branch_height(&node_to_search);
+                printf("%d\n", node_balance);
+                break;
+            case 20:
+                current_option = 20;
         }
     }
 
@@ -94,6 +105,7 @@ void add_node(tree_node **tree, int value, int depth)
         new_node->node_value = value;
         new_node->right_node = NULL;
         new_node->left_node = NULL;
+        new_node->node_height = depth;
         *current_node = new_node;
         printf("  New leaf node with value %d added at depth %d\n", value, current_depth);
     }
@@ -150,33 +162,35 @@ void print_tree(tree_node *tree, int depth)
     }
 }
 
-void find_node(tree_node **tree, int node_value, int depth)
+tree_node *find_node(tree_node **tree, int node_value)
 {
     tree_node **current_node = tree;
-    printf("current depth of the tree %d\n", depth);
+
     printf("searching for node with value %d\n",node_value);
 
     if(*current_node == NULL)
     {
         printf("The node with value %d is not in our tree\n", node_value);
-        return;
+        return (tree_node *) NULL;
     }
     else if(node_value < (*current_node)->node_value)
     {
         printf("current node checked has value %d, bigger than the node we are searching for! Going to the left\n", (*current_node)->node_value);
         current_node = &(*current_node)->left_node;
-        find_node(current_node,  node_value, depth + 1);
+        return find_node(current_node,  node_value);
     }
     else if(node_value > (*current_node)->node_value)
     {
         printf("current node checked has value %d, smaller than the node we are searching for! Going to the right\n", (*current_node)->node_value);
         current_node = &(*current_node)->right_node;
-        find_node(current_node,  node_value, depth + 1);
+        return find_node(current_node,  node_value);
     }
     else
     {
-        printf("Node found! at depth %d\n", depth);
+
+        return *current_node;
     }
+
 }
 
 void find_smallest_node(tree_node **tree, int depth)
@@ -303,6 +317,50 @@ void remove_node(tree_node **tree, int node_value)
     }
 }
 
+int find_branch_height(tree_node *node_to_search)
+{
+
+    int left;
+    int right;
+
+    if(&(*node_to_search) ==  NULL)
+    {
+        return 0;
+    }
+
+    printf("current node we have is %d\n", (node_to_search)->node_value);
+
+    left = find_branch_height((node_to_search)->left_node);
+    right = find_branch_height( (node_to_search)->right_node);
+
+    return 1 + (left > right ? left : right);
+};
+
+int find_node_balance(int node_value)
+{
+    int left, right, balance = 0;
+    tree_node *node_to_search;
+    node_to_search = find_node(&(Tree_root), 80);
+    left = find_branch_height(node_to_search->left_node);
+    right = find_branch_height(node_to_search->right_node);
+    balance = right - left;
+    if(balance == 0)
+    {
+        printf("This Node is balanced!\n");
+    }
+    else if(balance < 0)
+    {
+        printf("This Node is unbalanced on the left branch!\n");
+    }
+    else
+    {
+        printf("This right is unbalanced on the right branch!\n");
+    }
+    return balance;
+
+
+}
+
 void free_tree(tree_node **tree)
 {
     if (*tree == NULL)
@@ -313,4 +371,32 @@ void free_tree(tree_node **tree)
 
     free(*tree);
     *tree = NULL;
+}
+
+//Note: its called right_rotate because the lft_ndoe is now going where its father node was, if we try to think about it a little we can see that the left_node is moving to the right
+
+tree_node *right_node_rotate(tree_node *node)
+{
+    tree_node *current_node = node;
+    tree_node *left_node = current_node->left_node;
+    tree_node *aux_node = left_node->right_node;
+
+    left_node->right_node = current_node;
+    current_node->left_node = aux_node;
+
+    return left_node;
+}
+
+tree_node *left_node_rotate(tree_node *node)
+{
+    tree_node *current_node = node;
+    tree_node *right_node = current_node->right_node;
+    tree_node *aux_node = right_node->left_node;
+
+    right_node->left_node = current_node;
+    right_node->right_node = aux_node;
+
+
+    return right_node;
+
 }
